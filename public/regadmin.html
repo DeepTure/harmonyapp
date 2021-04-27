@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Apps</title>
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    function agrega_admin() {
+      var socket = io.connect();
+      var nombre = document.getElementById("name_admin");
+      var appa = document.getElementById("app_admin");
+      var apma = document.getElementById("apm_admin");
+      var usuario = document.getElementById("nu_admin");
+      var correo = document.getElementById("co_admin");
+      var genero = $("input[name=optradio]:checked").val();
+      var password = document.getElementById("pass_admin");
+      if (nombre.value == "") {
+        swal("Ups! Lo siento", "Ingresa el Nombre", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (appa.value == "") {
+        swal("Ups! Lo siento", "Agrega el Apellido Paterno", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (apma.value == "") {
+        swal("Ups! Lo siento", "Agrega el Apellido Materno", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (usuario.value == "") {
+        swal("Ups! Lo siento", "Agrega el Nombre de Usuario", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (correo.value == "") {
+        swal("Ups! Lo siento", "Agrega un Correo", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (password.value == "") {
+        swal("Ups! Lo siento", "Agrega una Contraseña", "warning", {
+          button: "Lo revisaré",
+        });
+      } else if (genero == "") {
+        swal("Ups! Lo siento", "Agrega un genero", "warning", {
+          button: "Lo revisaré",
+        });
+      } else {
+        swal("Administrador Registrado");
+        socket.emit("name_admin", nombre.value);
+        socket.emit("apellidop_admin", appa.value);
+        socket.emit("apellidom_admin", apma.value);
+        socket.emit("name_usu_admin", usuario.value);
+        socket.emit("correo_admin", correo.value);
+        socket.emit("pass_admin", password.value);
+        socket.emit("genero_admin", genero);
+      }
+
+       socket.on("listo", function(data) {
+        if (data == true) {
+          swal("Bien","Nuevo usuario regirtrado","success");
+          $nombre.val("");
+          $app.val("");
+          $apm.val("");
+          $usuario.val("");
+          $contra.val("");
+          $email.val("");
+        }
+      })
+        socket.on("Ya_existe", function(data) {
+        swal("Ups! Puede que ese usuaio ya exista","Intente de nuevo o ingrese otro nombre de usuario","error");
+      })
+
+    }
+
+
+
+    window.onload = function(e) {
+      document.getElementById("genero").checked = true;
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="indexadmin.html"><img src="img/pajaritoSinFondo.png" id="logo">BIRDIE</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="indexadmin.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="regadmin.html">Registrar Administrador</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Consultausu.html">Consultar Usuarios</a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" href="nuevapp.html">registrar app</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Cerrar sesion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead" style="background-image: url('http://www.haitaoit.com/upload/201706/05/201706051052203214.gif')">
+    <div class="container">
+      <div class="site-heading">
+        <h1>Registrar Administrador</h1>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <p><b>Nuevo Administrador</b></p>
+        <form id="contactForm">
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label for="name_admin">Administrador</label>
+              <input type="text" id="name_admin" name="name_admin" class="form-control" minlength=2 maxlength=10 placeholder="Nombre" required data-validation-required-message="Ingrese algo.">
+              <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group floating-label-form-group controls">
+              <label for="app_admin">Apellido Paterno</label>
+              <input type="text" id="app_admin" name="app_admin" class="form-control" minlength=2 maxlength=10 placeholder="Apellido Paterno" required data-validation-required-message="Ingrese algo.">
+            </div>
+            <div class="form-group floating-label-form-group controls">
+              <p class="help-block text-danger"></p>
+              <label for="apm_admin">Apellido Materno</label>
+              <input type="text" id="apm_admin" name="apm_admin" class="form-control" minlength=2 maxlength=10 placeholder="Apellido Materno" required data-validation-required-message="Ingrese algo.">
+            </div>
+            <div class="form-group floating-label-form-group controls">
+              <p class="help-block text-danger"></p>
+              <label for="nu_admin">Nombre de Usuario</label>
+              <input type="text" id="nu_admin" name="nu_admin" class="form-control" minlength=2 maxlength=15 placeholder="Nombre de Usuario" required data-validation-required-message="Ingrese algo.">
+              <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group floating-label-form-group controls">
+              <p class="help-block text-danger"></p>
+              <label for="co_admin">Correo</label>
+              <input type="email" id="co_admin" name="co_admin" class="form-control" minlength=2 maxlength=45 placeholder="Correo" required data-validation-required-message="Ingrese algo.">
+              <p class="help-block text-danger"></p>
+            </div>
+            <div class="control-group">
+              <div class="form-group oating-label-form-group controls">
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Masculino"> Masculino</label>
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Femenino"> Femenino</label>
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Otro"> Otro</label>
+              </div>
+            </div>
+            <div class="form-group floating-label-form-group controls">
+              <p class="help-block text-danger"></p>
+              <label for="pass_admin">Contraseña</label>
+              <input type="password" id="pass_admin" name="pass_admin" class="form-control" minlength=2 maxlength=8 placeholder="Contrase&ntilde;a" required data-validation-required-message="Ingrese algo.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+      </div>
+      <div id="success"></div>
+           </form>
+
+    </div>
+
+     <div class="form-group" align="center">
+        <input type="button" id="enviaradmin" class="btn btn-secondary2" value="Agregar" onclick="agrega_admin()">
+      </div>
+
+  </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center" x>
+            <li class="list-inline-item">
+              <a href="https://twitter.com/?lang=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://es-la.facebook.com/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.instagram.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.youtube.com/?gl=MX&hl=es-419">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://plus.google.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.pinterest.com.mx/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; KND 2017</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Iniciar Sesión</title>
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    function enviar() {
+      var socket = io.connect();
+      var $formuenviar = $("#contactForm2");
+      var $user = document.getElementById("usu");
+      var $pass = document.getElementById("pass");
+      socket.emit("check pass", $pass.value);
+      socket.emit("check user", $user.value);
+ 
+    localStorage.setItem("idstorage", $user.value);
+        }
+    window.onload = function(e) {
+      document.getElementById("genero").checked = true;
+    }
+    $(function() {
+      var socket = io.connect();
+      var $datosfrom = $("#contactForm");
+      var $nombre = $("#Nombre");
+      var $usuario = $("#nameusu");
+      var $app = $("#Paterno");
+      var $apm = $("#Materno");
+      var $contra = $("#contra");
+      var $email = $("#email");
+      var $gen = $("#genero");
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send name", $nombre.val());
+      })
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send app", $app.val());
+      })
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send apm", $apm.val());
+      })
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send usuario", $usuario.val());
+      })
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send contra", $contra.val());
+      })
+      $datosfrom.submit(function(e) {
+        e.preventDefault();
+        socket.emit("send email", $email.val());
+      })
+      $datosfrom.submit(function(e) {
+          var valor = $("input[name=optradio]:checked").value;
+        socket.emit("send genero", valor);
+      })
+      socket.on("verficado", function(data) {
+        if (data == 1) {
+          swal("Ingresado", "7u7r admin", "success")
+            .then((value) => {
+              location.href = "indexadmin.html";
+            });
+        } else if (data == 2) {
+          swal("Ingresado", "7u7r usuario", "success")
+            .then((value) => {
+              location.href = "index-usu.html";
+            });
+        } else {
+          swal("Error","Baia baia ¬¬","error");
+        }
+      })
+      socket.on("listo", function(data) {
+        if (data == true) {
+          swal("Bien","Nuevo usuario regirtrado","success");
+          $nombre.val("");
+          $app.val("");
+          $apm.val("");
+          $usuario.val("");
+          $contra.val("");
+          $email.val("");
+        }
+      })
+      socket.on("Ya_existe", function(data) {
+        swal("Ups! Puede que ese usuaio ya exista","Intente de nuevo o ingrese otro nombre de usuario","error");
+      })
+    });
+
+  </script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><img src="img/pajaritoSinFondo.png" id="logo">BIRDIE</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contacto/Preguntas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="post.html">Iniciar Sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead" style="background-image: url('http://digitalspyuk.cdnds.net/16/42/980x490/landscape-1476967458-giphy.gif')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Iniciar Sesión</h1>
+            <form name="login" id="contactForm2" action="index.html" method="post" novalidate>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group floating-label-form-group2 controls">
+                  <label for="usu">Usuario</label>
+                  <input type="text" class="form-control" placeholder="Usuario" id="usu" required data-validation-required-message="Introduzca su nombre.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group floating-label-form-group2 controls">
+                  <label for="pass">Contraseña</label>
+                  <input type="password" class="form-control" placeholder="Contraseña" id="pass" required data-validation-required-message="Introduzca su conraseña.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <br>
+              <div id="success"></div>
+              <div class="form-group" align="center">
+                <button type="submit" class="btn btn-secondary2" id="sendMessageButton1" onclick="enviar()">Iniciar Sesión</button>
+              </div>
+            </form>
+
+            <h3 class="subheading">¿No tienes cuenta? <a href="#registrar">Crea una aquí</a></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="post-heading">
+          <a name="registrar"><h1>Regístrate</h1></a>
+          <span class="subheading">Disfruta con nosotros</span>
+          <br><br>
+        </div>
+        <form name="login" id="contactForm" novalidate>
+          <div class="control-group">
+            <div class="form-group two-fields">
+              <div class="input-group">
+                <div class="floating-label-form-group controls">
+                  <label for="Nombre">Nombre</label>
+                  <input type="text" class="form-control" placeholder="Nombre" id="Nombre" minlength=2 maxlength=10 required data-validation-required-message="Introduzca su nombre.">
+                  <p class="help-block text-danger"></p>
+                </div>
+                <div class="floating-label-form-group controls">
+                  <label for="Paterno">A. Paterno</label>
+                  <input type="text" class="form-control" placeholder="Paterno" id="Paterno" minlength=2 maxlength=10 required data-validation-required-message="Introduzca A. paterno.">
+                  <p class="help-block text-danger"></p>
+                </div>
+                <div class="floating-label-form-group controls">
+                  <label for="Materno">A. Materno</label>
+                  <input type="text" class="form-control" placeholder="Materno" id="Materno" minlength=2 maxlength=10 required data-validation-required-message="Introduzca A. materno.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label for="nameusu">Nombre de Usuario</label>
+              <input type="text" class="form-control" placeholder="Nombre de Usuario" id="nameusu" minlength=2 maxlength=15 required data-validation-required-message="Introduzca un nombre de usuario.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label for="email">Correo</label>
+              <input type="email" class="form-control" placeholder="Correo" id="email" minlength=2 maxlength=45 required data-validation-required-message="Introduzca su correo electrónico.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <br>
+          <div class="control-group">
+            <div class="form-group oating-label-form-group controls">
+              <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Masculino"> Masculino</label>
+              <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Femenino"> Femenino</label>
+              <label class="radio-inline"><input type="radio" name="optradio" id="genero" value="Otro"> Otro</label>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label for="contra">Contraseña</label>
+              <input type="password" class="form-control" placeholder="Contraseña" id="contra" minlength=2 maxlength=8 required data-validation-required-message="Introduzca su conraseña.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <br>
+          <div id="success"></div>
+          <div class="form-group" align="center">
+            <button type="submit" class="btn btn-secondary2" id="sendMessageButton2">Registrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="https://twitter.com/?lang=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://es-la.facebook.com/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.instagram.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.youtube.com/?gl=MX&hl=es-419">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://plus.google.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-google fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.pinterest.com.mx/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; KND 2017</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>

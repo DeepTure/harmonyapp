@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>index</title>
+
+
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+var socket = io.connect();
+
+
+
+   $(function(){
+
+    socket.emit("mostrar");
+     socket.emit("mostrar2");
+      socket.emit("mostrar3");
+       socket.emit("mostrar4");
+
+
+     
+    socket.on("regresarjuegos",function(data){
+        var str = data;
+     
+
+        var table = document.createElement("TABLE");
+          table.setAttribute("id", "myTable");
+          document.body.appendChild(table);
+
+          var y = document.createElement("TR");
+          y.setAttribute("id", "myTr");
+          document.getElementById("myTable").appendChild(y);
+
+
+          var node = document.createElement("TD");
+        var x = document.createElement("IMG");
+        x.setAttribute('src',"img/"+str);
+         x.setAttribute("width", "200");
+           x.setAttribute("height", "200");
+           x.setAttribute("target", "_self");
+           node.appendChild(x);
+        document.getElementById("1").appendChild(node);
+      
+        
+      });
+    socket.on("regresardeporte",function(data){
+        var str = data;
+     
+
+        var table = document.createElement("TABLE");
+          table.setAttribute("id", "myTable");
+          document.body.appendChild(table);
+
+          var y = document.createElement("TR");
+          y.setAttribute("id", "myTr");
+          document.getElementById("myTable").appendChild(y);
+
+
+          var node = document.createElement("TD");
+        var x = document.createElement("IMG");
+        x.setAttribute('src',"img/"+str);
+         x.setAttribute("width", "200");
+           x.setAttribute("height", "200");
+           x.setAttribute("target", "_self");
+           node.appendChild(x);
+        document.getElementById("2").appendChild(node);
+      
+        
+      });
+    socket.on("regresarsociales",function(data){
+        var str = data;
+     
+
+        var table = document.createElement("TABLE");
+          table.setAttribute("id", "myTable");
+          document.body.appendChild(table);
+
+          var y = document.createElement("TR");
+          y.setAttribute("id", "myTr");
+          document.getElementById("myTable").appendChild(y);
+
+
+          var node = document.createElement("TD");
+        var x = document.createElement("IMG");
+        x.setAttribute('src',"img/"+str);
+         x.setAttribute("width", "200");
+           x.setAttribute("height", "200");
+           x.setAttribute("target", "_self");
+           node.appendChild(x);
+        document.getElementById("3").appendChild(node);
+      
+        
+      });
+    socket.on("regresarterror",function(data){
+        var str = data;
+     
+
+        var table = document.createElement("TABLE");
+          table.setAttribute("id", "myTable");
+          document.body.appendChild(table);
+
+          var y = document.createElement("TR");
+          y.setAttribute("id", "myTr");
+          document.getElementById("myTable").appendChild(y);
+
+
+          var node = document.createElement("TD");
+        var x = document.createElement("IMG");
+        x.setAttribute('src',"img/"+str);
+         x.setAttribute("width", "200");
+           x.setAttribute("height", "200");
+           x.setAttribute("target", "_self");
+           node.appendChild(x);
+        document.getElementById("4").appendChild(node);
+      
+        
+      });
+
+
+
+
+
+
+    });
+
+
+
+</script>
+  
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="indexadmin.html"><img src="img/pajaritoSinFondo.png" id="logo">BIRDIE</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+  
+     <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index-usu.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="modifica.html">Modificar Perfil</a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" href="all.html">todas las apps</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Cerrar Sesión</a>
+            <!-- :v -->
+          </li>
+                  </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead" style="background-image: url('https://awebstar.com.sg/wp-content/uploads/2017/12/Gesture-Driven-UI.gif')">
+    <div class="container">
+      <div class="site-heading">
+        <h1>Aplicaciónes</h1>
+      </div>
+    </div>
+  </header>
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+       <div class="control-group">
+          <div class="post-heading" id="1">
+          <h3>Juegos</h3>
+          </div>
+
+          <div class="post-heading" id="2">
+          <h3>Deporte</h3>
+          </div>
+
+          <div class="post-heading" id="3">
+          <h3>Sociales</h3>
+          </div>
+
+
+          <div class="post-heading" id="4">
+          <h3>Terror</h3>
+          </div>
+
+
+
+  
+      </div>
+    </div>
+  </div>
+</div>
+
+  <hr>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center" x>
+            <li class="list-inline-item">
+              <a href="https://twitter.com/?lang=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://es-la.facebook.com/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.instagram.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.youtube.com/?gl=MX&hl=es-419">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://plus.google.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.pinterest.com.mx/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; KND 2017</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>

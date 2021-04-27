@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Apps</title>
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+ <script type="text/javascript">
+    var socket = io.connect();
+
+
+    function eliminar() {
+      var nombre_buscado = document.getElementById("name_usu").value;
+      if (nombre_buscado == "") {
+        swal("Se te olvidó", "Escribe antes el nombre del usuario", "warning");
+      } else {
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado no habrá forma de recuperar el usuario",
+            icon: "warning",
+            buttons: ["Mmm, mejor no","Seguro!"],
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              socket.emit("Elimina_usu", nombre_buscado);
+              swal("Hecho!","Usuario Eliminado", {
+                icon: "success",
+              });
+              $("#name_user").val("");
+              $("#name_real").val("");
+              $("#correo_usu").val("");
+              $("#genero_usu").val("");
+              $("#contra_usu").val("");
+              $("#apellidop_usu").val("");
+              $("#apellidom_usu").val("");
+               $("#genero_usu").val("");
+            } else {
+              swal("Se ha cancelado","El usuario está a salvo!", {
+                button: "Gracias!"
+              });
+            }
+          });
+      }
+    }
+
+    function modificar() {
+      var name_user = document.getElementById("name_user").value;
+      var name_real = document.getElementById("name_real").value;
+      var apellidop_usu = document.getElementById("apellidop_usu").value;
+      var apellidom_usu = document.getElementById("apellidom_usu").value;
+      var correo_usu = document.getElementById("correo_usu").value;
+      var contra_usu = document.getElementById("contra_usu").value;
+      var genero_usu = $("input[name=optradio]:checked").val();
+      if (name_user == "") {
+        swal("Ups!", "No puedes dejar vacio el nombre de usuario", "warning");
+      } else if (name_real == "") {
+        swal("Ups!", "No puedes dejar vacio el nombre", "warning");
+      } else if (apellidop_usu == "") {
+        swal("Ups!", "No puedes dejar vacio el Apellido Paterno", "warning");
+      } else if (apellidom_usu == "") {
+        swal("Ups!", "No puedes dejar vacio el Apellido Materno", "warning");
+      } else if (correo_usu == "") {
+        swal("Ups!", "No puedes dejar vacio el Correo", "warning");
+      } else if (contra_usu == "") {
+        swal("Ups!", "No puedes dejar vacia la contraseÃ±a", "warning");
+      } else if (genero_usu == "") {
+        swal("Ups!", "No puedes dejar vacio el genero", "warning");
+      } else {
+        socket.emit("cambia_user", name_user);
+        socket.emit("cambia_nom", name_real);
+        socket.emit("cambia_app", apellidop_usu);
+        socket.emit("cambia_apm", apellidom_usu);
+        socket.emit("cambia_correo", correo_usu);
+        socket.emit("cambia_contra", contra_usu);
+        socket.emit("cambia_genero", genero_usu);
+        swal("Listo!", "Modificado", "success");
+      }
+    }
+
+
+    function buscar() {
+      var nombre_buscado = document.getElementById("name_usu").value;
+      if (nombre_buscado == "") {
+        swal("Se te olvidó", "Escribe antes el nombre del usuario", "warning");
+      } else {
+        socket.emit("Busca_usu", nombre_buscado);
+      }
+      socket.on("usuario_nom", function(data) {
+        $("#name_user").val(data);
+      })
+      socket.on("nombre_usu", function(data) {
+        $("#name_real").val(data);
+      })
+      socket.on("Correo_usu", function(data) {
+        $("#correo_usu").val(data);
+      })
+      socket.on("genero_usu", function(data) {
+          if(data == "Masculino"){
+            document.getElementById("genero1").checked = true;
+          }
+          if(data == "Femenino"){
+            document.getElementById("genero2").checked = true;
+          }
+            if(data == "Otro"){
+            document.getElementById("genero3").checked = true;
+          }
+      })
+      socket.on("password_usu", function(data) {
+        $("#contra_usu").val(data);
+      })
+      socket.on("apellido_paterno", function(data) {
+        $("#apellidop_usu").val(data);
+      })
+      socket.on("apellido_materno", function(data) {
+        $("#apellidom_usu").val(data);
+      })
+      socket.on("No sirvio", function(data) {
+        swal("Error", "No se encontró usuario", "error");
+        $("#name_user").val(data);
+        $("#name_real").val(data);
+        $("#correo_usu").val(data);
+        $("#genero_usu").val(data);
+        $("#contra_usu").val(data);
+        $("#apellidop_usu").val(data);
+        $("#apellidom_usu").val(data);
+      })
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="indexadmin.html"><img src="img/pajaritoSinFondo.png" id="logo">BIRDIE</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="indexadmin.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="regadmin.html">Registrar Administrador</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Consultausu.html">Consultar Usuarios</a>
+          </li>
+           <li class="nav-item">
+            <a class="nav-link" href="nuevapp.html">registrar app</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Cerrar sesion</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead" style="background-image: url('https://cdn.dribbble.com/users/165116/screenshots/2553295/dribble-ux.gif')">
+    <div class="container">
+      <div class="site-heading">
+        <h1>Consulta de Usuarios</h1>
+        <!-- aquí añade lo de buscar shavito :v -->
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <!-- aquí añade lo demás :v -->
+        <p><b>Nombre de Usuario</b></p>
+        <form id="formulario">
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label for="name_usu">Nombre de usuario</label>
+              <input type="text" id="name_usu" name="name_usu" class="form-control" placeholder="Usuario" required data-validation-required-message="Ingrese algo.">
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div id="success"></div>
+          <div class="form-group" align="center">
+            <input type="button" id="Buscar" class="btn btn-secondary2" value="Buscar" onclick="buscar()">
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="name_user">Usuario</label>
+            <input type="text" id="name_user" name="name_user" class="form-control" placeholder="Usuario" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="name_real">Nombre</label>
+            <input type="text" id="name_real" name="name_real" class="form-control" placeholder="Nombre" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="apellidop_usu">Apellido Paterno</label>
+            <input type="text" id="apellidop_usu" name="apellidop_usu" class="form-control" placeholder="Apellido Paterno" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="apellidom_usu">Apellido Materno</label>
+            <input type="text" id="apellidom_usu" name="apellidom_usu" class="form-control" placeholder="Apellido Materno" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="correo_usu">Correo</label>
+            <input type="text" id="correo_usu" name="correo_usu" class="form-control" placeholder="Correo" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+          <div class="form-group floating-label-form-group controls">
+            <label for="contra_usu">Contraseña</label>
+            <input type="text" id="contra_usu" name="contra_usu" class="form-control" placeholder="Contrase&ntilde;a" required data-validation-required-message="Ingrese algo.">
+            <p class="help-block text-danger"></p>
+          </div>
+                 <div class="control-group">
+              <div class="form-group oating-label-form-group controls">
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero1" value="Masculino"> Masculino</label>
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero2" value="Femenino"> Femenino</label>
+                <label class="radio-inline"><input type="radio" name="optradio" id="genero3" value="Otro"> Otro</label>
+              </div>
+            </div>
+          <div id="success"></div>
+          <div class="form-group" align="center">
+            <input type="button" id="Modificar" class="btn btn-secondary2" value="Modificar" onclick="modificar()">
+          </div>
+          <div id="success"></div>
+          <div class="form-group" align="center">
+            <input type="button" id="Eliminar" class="btn btn-secondary2" value="Eliminar" onclick="eliminar()">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center" x>
+            <li class="list-inline-item">
+              <a href="https://twitter.com/?lang=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://es-la.facebook.com/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.instagram.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.youtube.com/?gl=MX&hl=es-419">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-youtube fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://plus.google.com/?hl=es">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://www.pinterest.com.mx/">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; KND 2017</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/popper/popper.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
